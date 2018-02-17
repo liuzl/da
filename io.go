@@ -24,8 +24,8 @@ func Load(dir string) (*Dict, error) {
 	}
 	in := bufio.NewReader(file)
 	dataDecoder := gob.NewDecoder(in)
-	values := make(map[int]string)
-	err = dataDecoder.Decode(values)
+	var values [][]string
+	err = dataDecoder.Decode(&values)
 	if err != nil {
 		return nil, err
 	}
@@ -33,8 +33,9 @@ func Load(dir string) (*Dict, error) {
 }
 
 func (self *Dict) Save(dir string) error {
-	self.Lock()
-	defer self.Unlock()
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		os.Mkdir(dir, 0755)
+	}
 	trieFile := filepath.Join(dir, "trie")
 	valueFile := filepath.Join(dir, "values")
 	err := self.Trie.SaveToFile(trieFile, "gob")
