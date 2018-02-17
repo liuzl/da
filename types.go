@@ -8,5 +8,5 @@ import (
 type Dict struct {
 	sync.RWMutex
 	Trie   *cedar.Cedar
-	Values []string
+	Values map[int]string
 }

@@ -24,8 +24,8 @@ func Load(dir string) (*Dict, error) {
 	}
 	in := bufio.NewReader(file)
 	dataDecoder := gob.NewDecoder(in)
-	var values []string
-	err = dataDecoder.Decode(&values)
+	values := make(map[int]string)
+	err = dataDecoder.Decode(values)
 	if err != nil {
 		return nil, err
 	}
@@ -49,5 +49,5 @@ func (self *Dict) Save(dir string) error {
 	out := bufio.NewWriter(file)
 	defer out.Flush()
 	dataEncoder := gob.NewEncoder(out)
-	return dataEncoder.Encode(&self.Values)
+	return dataEncoder.Encode(self.Values)
 }
