@@ -9,15 +9,18 @@ import (
 	"strings"
 )
 
-func Build(fileName string) (*Dict, error) {
+func BuildFromFile(fileName string) (*Dict, error) {
 	file, err := os.Open(fileName)
 	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
+	return Build(file)
+}
+func Build(in io.Reader) (*Dict, error) {
 	trie := cedar.New()
 	values := [][]string{}
-	br := bufio.NewReader(file)
+	br := bufio.NewReader(in)
 	for {
 		line, err := br.ReadString('\n')
 		if err == io.EOF {
