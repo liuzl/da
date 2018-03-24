@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// BuildFromFile builds the da dict from fileName
 func BuildFromFile(fileName string) (*Dict, error) {
 	file, err := os.Open(fileName)
 	if err != nil {
@@ -17,6 +18,8 @@ func BuildFromFile(fileName string) (*Dict, error) {
 	defer file.Close()
 	return Build(file)
 }
+
+// Build da dict from io.Reader
 func Build(in io.Reader) (*Dict, error) {
 	trie := cedar.New()
 	values := [][]string{}
@@ -39,36 +42,38 @@ func Build(in io.Reader) (*Dict, error) {
 	return &Dict{Trie: trie, Values: values}, nil
 }
 
-func (self *Dict) PrefixMatch(str string) (map[string][]string, error) {
-	if self.Trie == nil {
+// PrefixMatch str by Dict, returns the matched string and its according values
+func (d *Dict) PrefixMatch(str string) (map[string][]string, error) {
+	if d.Trie == nil {
 		return nil, fmt.Errorf("Trie is nil")
 	}
 	ret := make(map[string][]string)
-	for _, id := range self.Trie.PrefixMatch([]byte(str), 0) {
-		key, err := self.Trie.Key(id)
+	for _, id := range d.Trie.PrefixMatch([]byte(str), 0) {
+		key, err := d.Trie.Key(id)
 		if err != nil {
 			return nil, err
 		}
-		value, err := self.Trie.Value(id)
+		value, err := d.Trie.Value(id)
 		if err != nil {
 			return nil, err
 		}
-		ret[string(key)] = self.Values[value]
+		ret[string(key)] = d.Values[value]
 	}
 	return ret, nil
 }
 
-func (self *Dict) Get(str string) ([]string, error) {
-	if self.Trie == nil {
+// Get the values of str, like map
+func (d *Dict) Get(str string) ([]string, error) {
+	if d.Trie == nil {
 		return nil, fmt.Errorf("trie is nil")
 	}
-	id, err := self.Trie.Get([]byte(str))
+	id, err := d.Trie.Get([]byte(str))
 	if err != nil {
 		return nil, err
 	}
-	value, err := self.Trie.Value(id)
+	value, err := d.Trie.Value(id)
 	if err != nil {
 		return nil, err
 	}
-	return self.Values[value], nil
+	return d.Values[value], nil
 }
