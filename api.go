@@ -30,7 +30,7 @@ func Build(in io.Reader) (*Dict, error) {
 		if err == io.EOF {
 			break
 		}
-		items := strings.Split(line, "\t")
+		items := strings.Split(strings.TrimSpace(line), "\t")
 		if len(items) < 2 {
 			continue
 		}
