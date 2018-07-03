@@ -30,7 +30,9 @@ func Build(in io.Reader) (*Dict, error) {
 		if err == io.EOF {
 			break
 		}
-		items := strings.Split(strings.TrimSpace(line), "\t")
+		// items := strings.Split(strings.TrimSpace(line), "\t")
+		// TODO
+		items := strings.Fields(line)
 		if len(items) < 2 {
 			continue
 		}
