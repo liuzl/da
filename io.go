@@ -3,9 +3,10 @@ package da
 import (
 	"bufio"
 	"encoding/gob"
-	"github.com/liuzl/cedar-go"
 	"os"
 	"path/filepath"
+
+	"github.com/liuzl/cedar-go"
 )
 
 // Load gob serialized dict from dir

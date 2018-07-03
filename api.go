@@ -3,10 +3,11 @@ package da
 import (
 	"bufio"
 	"fmt"
-	"github.com/liuzl/cedar-go"
 	"io"
 	"os"
 	"strings"
+
+	"github.com/liuzl/cedar-go"
 )
 
 // BuildFromFile builds the da dict from fileName
@@ -29,7 +30,7 @@ func Build(in io.Reader) (*Dict, error) {
 		if err == io.EOF {
 			break
 		}
-		items := strings.Fields(line)
+		items := strings.Split(line, "\t")
 		if len(items) < 2 {
 			continue
 		}
