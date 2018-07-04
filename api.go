@@ -30,9 +30,7 @@ func Build(in io.Reader) (*Dict, error) {
 		if err == io.EOF {
 			break
 		}
-		// items := strings.Split(strings.TrimSpace(line), "\t")
-		// TODO
-		items := strings.Fields(line)
+		items := strings.Split(strings.TrimSpace(line), "\t")
 		if len(items) < 2 {
 			continue
 		}
@@ -40,7 +38,12 @@ func Build(in io.Reader) (*Dict, error) {
 		if err != nil {
 			return nil, err
 		}
-		values = append(values, items[1:])
+
+		if len(items) > 2 {
+			values = append(values, items[1:])
+		} else {
+			values = append(values, strings.Fields(items[1]))
+		}
 	}
 	return &Dict{Trie: trie, Values: values}, nil
 }
